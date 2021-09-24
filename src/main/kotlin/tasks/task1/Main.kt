@@ -18,9 +18,12 @@ fun main() {
     )
 }
 
-fun getNonTerminals(lexemes: List<Lexeme>): List<Lexeme> = lexemes.filter { it.tokenType == "ID" }.distinct()
+fun getNonTerminals(lexemes: List<Lexeme>): List<String> = lexemes.filter { it.tokenType != "WS" }.zipWithNext()
+    .filter { it.first.tokenType == "ID" && it.second.tokenType == "COLON" }.map { it.first.text }.distinct()
 
-fun getTerminals(lexemes: List<Lexeme>) = lexemes.filter { it.tokenType == "STRING" }.distinct()
+fun getTerminals(lexemes: List<Lexeme>, nonTerminals: List<String>): List<String> =
+    lexemes.filter { it.tokenType == "STRING" }.map { it.text }.distinct() +
+            (lexemes.filter { it.tokenType == "ID" }.map { it.text }.toSet() - nonTerminals.toSet()).toList()
 
 fun getSemantics(lexemes: List<Lexeme>) = lexemes.filter { it.tokenType == "SEMANTIC" }.distinct()
 
@@ -40,10 +43,11 @@ fun getTable(lexemes: List<Lexeme>): Map<String, Int> {
     )
 
     var currentNonTerminalIndex = 11
-    getNonTerminals(lexemes).forEach { nonTerminal -> table[nonTerminal.text] = currentNonTerminalIndex++ }
+    val nonTerminals = getNonTerminals(lexemes)
+    nonTerminals.forEach { nonTerminal -> table[nonTerminal] = currentNonTerminalIndex++ }
 
     var currentTerminalIndex = 51
-    getTerminals(lexemes).forEach { terminal -> table[terminal.text] = currentTerminalIndex++ }
+    getTerminals(lexemes, nonTerminals).forEach { terminal -> table[terminal] = currentTerminalIndex++ }
 
     var currentSemanticIndex = 101
     getSemantics(lexemes).forEach { semantic -> table[semantic.text] = currentSemanticIndex++ }

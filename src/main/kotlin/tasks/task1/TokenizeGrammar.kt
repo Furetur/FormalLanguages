@@ -25,5 +25,3 @@ private val rules = listOf(
 private val grammarLexer = Lexer(rules)
 
 fun tokenizeGrammar(text: String) = grammarLexer.tokenize(text)
-
-fun Lexeme.isWhitespace(): Boolean = tokenType == "WS"
