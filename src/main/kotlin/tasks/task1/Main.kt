@@ -25,7 +25,7 @@ fun getTerminals(lexemes: List<Lexeme>, nonTerminals: List<String>): List<String
     lexemes.filter { it.tokenType == "STRING" }.map { it.text }.distinct() +
             (lexemes.filter { it.tokenType == "ID" }.map { it.text }.toSet() - nonTerminals.toSet()).toList()
 
-fun getSemantics(lexemes: List<Lexeme>) = lexemes.filter { it.tokenType == "SEMANTIC" }.distinct()
+fun getSemantics(lexemes: List<Lexeme>) = lexemes.filter { it.tokenType == "SEMANTIC" }.map { it.text }.distinct()
 
 fun getTable(lexemes: List<Lexeme>): Map<String, Int> {
     val table = mutableMapOf<String, Int>(
@@ -50,7 +50,7 @@ fun getTable(lexemes: List<Lexeme>): Map<String, Int> {
     getTerminals(lexemes, nonTerminals).forEach { terminal -> table[terminal] = currentTerminalIndex++ }
 
     var currentSemanticIndex = 101
-    getSemantics(lexemes).forEach { semantic -> table[semantic.text] = currentSemanticIndex++ }
+    getSemantics(lexemes).forEach { semantic -> table[semantic] = currentSemanticIndex++ }
 
     return table
 }
