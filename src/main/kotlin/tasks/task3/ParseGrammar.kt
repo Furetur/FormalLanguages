@@ -47,7 +47,9 @@ fun parseGrammar(tokens: List<LixyToken>): GrammarNode {
         rules.add(parseRule(tokenCursor))
     }
 
-    return GrammarNode(rules)
+    return GrammarNode(rules).also {
+        require(rules.isNotEmpty()) { "No grammar rules found" }
+    }
 }
 
 private fun parseRule(tokenCursor: MyTokenCursor): GrammarRuleNode {
@@ -57,4 +59,3 @@ private fun parseRule(tokenCursor: MyTokenCursor): GrammarRuleNode {
     tokenCursor.expectNext(DOT)
     return GrammarRuleNode(nonTerminal, rvalue)
 }
-

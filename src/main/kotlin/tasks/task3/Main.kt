@@ -3,7 +3,6 @@ package tasks.task3
 import de.m3y.kformat.Table
 import de.m3y.kformat.table
 import java.io.File
-import java.lang.StringBuilder
 
 fun main() {
     val text = File("src/main/resources/task3/grammar.txt").readText()

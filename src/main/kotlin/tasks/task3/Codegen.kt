@@ -62,6 +62,7 @@ private class CompilerVisitor(private val codeBuilder: CodeBuilder) : Visitor<Li
                 codeBuilder.addInstruction(GotoInstruction(endLabel)) // jump to end
                 // b
                 codeBuilder.putLabel(bLabel)
+                visit(operands[1])
                 // end
                 codeBuilder.putLabel(endLabel)
             }
