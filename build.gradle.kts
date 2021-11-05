@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
     implementation("guru.zoroark.lixy:lixy-jvm:-SNAPSHOT")
-    implementation("org.jetbrains.kotlinx:dataframe:0.8.0-dev-339-0.10.0.260")
+    implementation("de.m3y.kformat:kformat:0.8")
 
     testImplementation(kotlin("test"))
     testImplementation("io.strikt:strikt-core:0.32.0")

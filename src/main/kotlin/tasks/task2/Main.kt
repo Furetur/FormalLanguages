@@ -3,7 +3,7 @@ package tasks.task2
 import java.io.File
 
 fun main() {
-    val text = File("src/main/resources/task2/pascal_numbers.txt").readText()
+    val text = File("src/main/resources/task2/regular_grammar.txt").readText()
     val grammar = parseGrammar(text)
     val automataBuilder = AutomataBuilder(grammar.rules[0].definedNonTerminal.string, listOf("$"))
 

@@ -1,6 +1,7 @@
 package tasks.task2
 
-import org.jetbrains.dataframe.*
+import de.m3y.kformat.Table
+import java.lang.StringBuilder
 
 
 typealias State = String
@@ -11,25 +12,27 @@ data class Automata(
     val transitions: Map<State, List<AutomataTransition>>
 ) {
 
-    fun table(): DataFrame<Any?> {
+    fun table(): String {
         val symbols = transitions.entries.flatMap { it.value }.map { it.symbol }.distinct()
         val rows = transitions.mapValues { mapEntry ->
             val groupedTransitions = mapEntry.value.groupBy { it.symbol }
             listOf(mapEntry.key) + symbols.map { groupedTransitions.getOrDefault(it, emptyList()).map { it.destinationState } }
         }
-        var df = dataFrameOf(listOf("state") + symbols).fill(0, "")
-        for (row in rows) {
-            val dfRow = row.value.map { it.toString() }
-            df = df.append(*dfRow.toTypedArray())
-        }
-        return df
+        return de.m3y.kformat.table {
+            header("state", *symbols.toTypedArray())
+
+            for (row in rows) {
+                row(*row.value.map { it.toString() }.toTypedArray())
+            }
+
+            hints {
+                borderStyle = Table.BorderStyle.SINGLE_LINE // or NONE
+            }
+        }.render(StringBuilder()).toString()
     }
 
     override fun toString(): String {
-        return """
-            Automata: Initial State = $initialState, Finishing States = $finishingStates
-            ${table()}
-        """.trimIndent()
+        return "Automata: Initial State = $initialState, Finishing States = $finishingStates\n${table()}"
     }
 }
 
