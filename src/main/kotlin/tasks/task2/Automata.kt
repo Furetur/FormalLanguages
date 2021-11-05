@@ -4,19 +4,19 @@ import de.m3y.kformat.Table
 import java.lang.StringBuilder
 
 
-typealias State = String
-
-data class Automata(
+data class Automata<State>(
     val initialState: State,
     val finishingStates: List<State>,
-    val transitions: Map<State, List<AutomataTransition>>
+    val transitions: Map<State, List<AutomataTransition<State>>>
 ) {
 
     fun table(): String {
         val symbols = transitions.entries.flatMap { it.value }.map { it.symbol }.distinct()
         val rows = transitions.mapValues { mapEntry ->
             val groupedTransitions = mapEntry.value.groupBy { it.symbol }
-            listOf(mapEntry.key) + symbols.map { groupedTransitions.getOrDefault(it, emptyList()).map { it.destinationState } }
+            listOf(mapEntry.key) + symbols.map {
+                groupedTransitions.getOrDefault(it, emptyList()).map { it.destinationState }
+            }
         }
         return de.m3y.kformat.table {
             header("state", *symbols.toTypedArray())
@@ -36,4 +36,10 @@ data class Automata(
     }
 }
 
-data class AutomataTransition(val symbol: String, val destinationState: State)
+data class AutomataTransition<State>(val symbol: String, val destinationState: State)
+
+fun <State> Automata<State>.allDestinations(state: State, symbol: String): Set<State> =
+    transitions[state]?.filter { it.symbol == symbol }?.map { it.destinationState }?.toSet() ?: emptySet()
+
+val <State> Automata<State>.transitionSymbols
+    get() = transitions.flatMap { it.value }.map { it.symbol }.distinct()

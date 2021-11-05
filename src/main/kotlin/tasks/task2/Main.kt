@@ -5,7 +5,7 @@ import java.io.File
 fun main() {
     val text = File("src/main/resources/task2/regular_grammar.txt").readText()
     val grammar = parseGrammar(text)
-    val automataBuilder = AutomataBuilder(grammar.rules[0].definedNonTerminal.string, listOf("$"))
+    val automataBuilder = AutomataBuilder(grammar.rules[0].definedNonTerminal.string.drop(1).dropLast(1), listOf("$"))
 
     for (rule in grammar.rules) {
         val nonTerminal = rule.definedNonTerminal.string.drop(1).dropLast(1)
@@ -15,5 +15,9 @@ fun main() {
         }
     }
 
-    println(automataBuilder.automata())
+    val nfa = automataBuilder.automata()
+    println(nfa)
+    println("Dfa")
+    val dfa = nfa2dfa(nfa)
+    println(dfa)
 }
