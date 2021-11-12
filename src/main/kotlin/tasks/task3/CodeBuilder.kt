@@ -7,7 +7,7 @@ value class Label(val id: String = generateRandomString()) {
 
 class CodeBuilder {
     private val instructions = mutableListOf<Instruction>()
-    private var nextPosition = 0
+    private var nextPosition = 1
     private val labels = mutableMapOf<Label, Int /* position */>()
 
     fun addInstruction(instruction: Instruction) {
@@ -21,7 +21,7 @@ class CodeBuilder {
 
     fun getLabelPosition(label: Label): Int = labels[label] ?: error("Unknown label ${label.id}")
 
-    fun build(): List<String> = instructions.flatMap { it.compile(this) }
+    fun build(): List<String> = listOf(":") + instructions.flatMap { it.compile(this) }
 }
 
 private fun generateRandomString(): String = List(6) { ('a'..'z').random() }.joinToString("")

@@ -34,7 +34,12 @@ private class CompilerVisitor(private val codeBuilder: CodeBuilder) : Visitor<Li
 
     private fun TokenNode<LixyToken>.compile() {
         when (token.tokenType) {
-            TokenType.TERMINAL -> codeBuilder.addInstruction(TerminalInstruction(token.string))
+            TokenType.TERMINAL -> {
+                val terminalString = token.string
+                if (terminalString != "epsilon") {
+                    codeBuilder.addInstruction(TerminalInstruction(token.string))
+                }
+            }
             TokenType.NONTERMINAL -> {
                 val labelToNonTerminal = Label(token.string)
                 codeBuilder.addInstruction(CallInstruction(labelToNonTerminal))
