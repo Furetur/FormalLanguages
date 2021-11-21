@@ -1,0 +1,7 @@
+S := K S;
+S := s;
+K := A B;
+A := a;
+A := epsilon;
+B := b;
+B := epsilon;

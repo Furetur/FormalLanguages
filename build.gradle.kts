@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.5.21"
+    antlr
 }
 
 group = "me.furetur"
@@ -12,7 +13,14 @@ repositories {
     maven(url = "https://jitpack.io")
 }
 
+tasks.generateGrammarSource {
+    maxHeapSize = "64m"
+    arguments = arguments + listOf("-visitor")
+}
+
 dependencies {
+    antlr("org.antlr:antlr4:4.9.1")
+
     implementation("guru.zoroark.lixy:lixy-jvm:1849bb1")
     implementation("com.github.Furetur:pratt:0.1.2")
     implementation("de.m3y.kformat:kformat:0.8")
